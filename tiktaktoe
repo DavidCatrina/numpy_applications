@@ -14,7 +14,7 @@ class TikTakToe:
             print("That square is taken! Please select a new square")
             positionX = int(input("Please input X coordinate of your move: "))
             positionY = int(input("Please input Y coordinate of your move: "))
-            return self.is_valid_location(self, positionX, positionY, board, player)
+            return self.is_valid_location(positionX, positionY, board, player)
         #replace the square with the player number
         else:
             board[positionX,positionY] = player
@@ -30,30 +30,42 @@ class TikTakToe:
         if np.array_equal(board[[0,1,2],[0,1,2]], np.array([player,player,player])) or np.array_equal(board[[0,1,2],[2,1,0]], np.array([player,player,player])):
             return True
 
+    def is_draw(self, total_turns):
+        if total_turns == 10:
+            return True
+        else:
+            return False
+
     def main(self):
         #Game starts
         board = self.create_board()
         print(board)
         game_over = False
         turn = 0
+        total_turns = 0
 
-        while not game_over:
-            if turn == 0:
-                print("Player 1's turn")
-                positionX = int(input("Please input X coordinate of your move: "))
-                positionY = int(input("Please input Y coordinate of your move: "))
-                self.is_valid_location(positionX, positionY, board,1)
-                if self.is_winning_move(board, 1):
-                    print("Player 1 wins!")
-                    game_over = True
+        while not game_over :
+            total_turns += 1
+            if self.is_draw(total_turns):
+                print("Draw!")
+                game_over = True
             else:
-                print("Player 2's turn")
-                positionX = int(input("Please input X coordinate of your move: "))
-                positionY = int(input("Please input Y coordinate of your move: "))
-                self.is_valid_location(positionX, positionY, board,2)
-                if self.is_winning_move(board, 2):
-                    print("Player 2 wins!")
-                    game_over = True
+                if turn == 0:
+                    print("Player 1's turn")
+                    positionX = int(input("Please input X coordinate of your move: "))
+                    positionY = int(input("Please input Y coordinate of your move: "))
+                    self.is_valid_location(positionX, positionY, board,1)
+                    if self.is_winning_move(board, 1):
+                        print("Player 1 wins!")
+                        game_over = True
+                else:
+                    print("Player 2's turn")
+                    positionX = int(input("Please input X coordinate of your move: "))
+                    positionY = int(input("Please input Y coordinate of your move: "))
+                    self.is_valid_location(positionX, positionY, board,2)
+                    if self.is_winning_move(board, 2):
+                        print("Player 2 wins!")
+                        game_over = True
 
             print(board)
             turn += 1
