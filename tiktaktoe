@@ -1,0 +1,62 @@
+import numpy as np
+
+class TikTakToe:
+    def __init__(self):
+        pass
+
+    def create_board(self):
+        #Create the board
+        return np.zeros((3,3), dtype='int8')
+
+    def is_valid_location(self, positionX, positionY, board, player):
+        #check if the selected square is empty (equals to 0)
+        if board[positionX,positionY] != 0:
+            print("That square is taken! Please select a new square")
+            positionX = int(input("Please input X coordinate of your move: "))
+            positionY = int(input("Please input Y coordinate of your move: "))
+            return self.is_valid_location(self, positionX, positionY, board, player)
+        #replace the square with the player number
+        else:
+            board[positionX,positionY] = player
+            return board
+
+    def is_winning_move(self, board, player):
+        #Check horizonatl locations or vertical locations for win
+        for i in range(3):
+            if np.array_equal(board[i,:], np.array([player,player,player])) or np.array_equal(board[:,i], np.array([player,player,player])):
+                return True
+
+        #Check diagnols for win
+        if np.array_equal(board[[0,1,2],[0,1,2]], np.array([player,player,player])) or np.array_equal(board[[0,1,2],[2,1,0]], np.array([player,player,player])):
+            return True
+
+    def main(self):
+        #Game starts
+        board = self.create_board()
+        print(board)
+        game_over = False
+        turn = 0
+
+        while not game_over:
+            if turn == 0:
+                print("Player 1's turn")
+                positionX = int(input("Please input X coordinate of your move: "))
+                positionY = int(input("Please input Y coordinate of your move: "))
+                self.is_valid_location(positionX, positionY, board,1)
+                if self.is_winning_move(board, 1):
+                    print("Player 1 wins!")
+                    game_over = True
+            else:
+                print("Player 2's turn")
+                positionX = int(input("Please input X coordinate of your move: "))
+                positionY = int(input("Please input Y coordinate of your move: "))
+                self.is_valid_location(positionX, positionY, board,2)
+                if self.is_winning_move(board, 2):
+                    print("Player 2 wins!")
+                    game_over = True
+
+            print(board)
+            turn += 1
+            turn = turn % 2
+
+TikTakToe().main()
